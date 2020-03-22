@@ -4,12 +4,16 @@
 		die("connection faild");
 	}
 
-	// Database Total Posts Count...
+	if (isset($_GET['page'])) {
+		$pg = $_GET['page'];
+	}
+
 	$totalquery = "SELECT COUNT(id) FROM posts";
 
 	$totalresults = mysqli_query($con,$totalquery);
 	$totalrows = mysqli_fetch_assoc($totalresults);
 	$totalpost = ceil($totalrows['COUNT(id)'] / 3);
+
 
  ?>
 
@@ -33,10 +37,13 @@
 			</div>
 			<div class="row  p-2">
 				<?php 
+				$start = ($pg - 1) * 3;
+				$take = 3; 
+
 				$query = "SELECT posts.*, catagories.Title as tit
 							FROM posts
 							JOIN catagories 
-							ON posts.Catagoris_id = catagories.Id LIMIT 0,3";
+							ON posts.Catagoris_id = catagories.Id LIMIT $start, $take";
 
 				$results =  mysqli_query($con, $query);
 				while ($row = mysqli_fetch_assoc($results)) { ?>
@@ -55,12 +62,28 @@
 			<div class="row justify-content-end">
 			<nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center">
-					<li class="page-item ">
-						<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-					</li>
-					<?php for ($i=1; $i <=$totalpost; $i++) {  ?>
-						<li class="page-item"><a class="page-link" href="pagination.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+					<?php if ($pg>1) { ?>
+						<li class="page-item ">
+							<a class="page-link" href="pagination.php?page=<?php echo $pg-1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
+						</li>
+					<?php	}else{ ?>
+						<li class="page-item disabled">
+							<a class="page-link" href="pagination.php?page=<?php echo $pg-1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
+						</li>
+
 					<?php	} ?>
+
+					<?php for ($i=1; $i <=$totalpost; $i++) { 
+						if($pg == $i ) { ?>
+							<li class="page-item disabled"><a class="page-link" href="pagination.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+						<?php	}else{ ?>
+							<li class="page-item"><a class="page-link" href="pagination.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+
+						<?php	}
+
+						
+					} ?>
+
 					<?php if ($pg< $totalpost) { ?>
 						<li class="page-item">
 							<a class="page-link" href="pagination.php?page=<?php echo $pg+1 ?>">Next</a>
@@ -71,6 +94,9 @@
 						</li>
 
 					<?php	} ?>
+					
+					
+					
 				</ul>
 			</nav>
 		</div>
