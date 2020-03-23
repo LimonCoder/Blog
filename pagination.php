@@ -52,7 +52,7 @@
 						<img src="admin/posts/<?php echo $row['Images']; ?>" class="float-left  m-2" alt="image" width="120" height="120">
 						<p class="lead text-justify"><?php echo substr( $row['Description'],0, 150); ?></p>
 						<div class="row p-2 justify-content-end">
-							<a href="" class="btn btn-success">Read more</a>
+							<a href="detailsblog.php?sid=<?php echo $row['id']; ?>" class="btn btn-success">Read more</a>
 						</div>
 					</div>
 			<?php	}

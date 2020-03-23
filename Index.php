@@ -4,8 +4,12 @@
 		die("connection faild");
 	}
 
+		$pg = 0;
+	
+
 	// Database Total Posts Count...
 	$totalquery = "SELECT COUNT(id) FROM posts";
+
 
 	$totalresults = mysqli_query($con,$totalquery);
 	$totalrows = mysqli_fetch_assoc($totalresults);
@@ -55,9 +59,16 @@
 			<div class="row justify-content-end">
 			<nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center">
-					<li class="page-item ">
-						<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-					</li>
+					<?php if ($pg>1) { ?>
+						<li class="page-item ">
+							<a class="page-link" href="pagination.php?page=<?php echo $pg-1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
+						</li>
+					<?php	}else{ ?>
+						<li class="page-item disabled">
+							<a class="page-link" href="pagination.php?page=<?php echo $pg-1 ?>" tabindex="-1" aria-disabled="true">Previous</a>
+						</li>
+
+					<?php	} ?>
 					<?php for ($i=1; $i <=$totalpost; $i++) {  ?>
 						<li class="page-item"><a class="page-link" href="pagination.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
 					<?php	} ?>
